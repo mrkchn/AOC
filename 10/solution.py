@@ -1,3 +1,5 @@
+import copy
+
 import numpy as np
 
 with open('input.txt') as f:
@@ -46,4 +48,26 @@ for d in start_dirs:
             dist[c] = np.min([dist[c], steps])
 
 dist[np.where(dist == 1e10)] = 0
+
 print(f"Solution a: {int(np.max(dist))}")
+# %%
+# My hypothesis is that a region is "in the loop" if it has an odd number of boundaries on every side
+borders = copy.deepcopy(dist)
+
+horizontals = (np.abs(np.diff(dist, axis=1)) == 1) * 1
+borders_above = (np.cumsum(horizontals, axis=0) % 2) == 1
+borders_below = (np.flip(np.cumsum(np.flip(horizontals, axis=0), axis=0), axis=0) % 2) == 1
+borders_horiz = (borders_above & borders_below) * 1
+borders_horiz = np.hstack((borders_horiz, np.zeros((borders_horiz.shape[0], 1))))
+
+verticals = (np.abs(np.diff(dist, axis=0)) == 1) * 1
+borders_left = (np.cumsum(verticals, axis=1) % 2) == 1
+borders_right = (np.flip(np.cumsum(np.flip(verticals, axis=1), axis=1), axis=1) % 2) == 1
+borders_vert = (borders_left & borders_right) * 1
+borders_vert = np.vstack((borders_vert, np.zeros((1, borders_vert.shape[1]))))
+
+borders = (borders > 0) * 1
+borders[s] = 1
+interior = borders_vert * borders_horiz * (1 - borders)
+print(f"Solution b: {int(np.sum(interior))}")
+
