@@ -104,7 +104,7 @@ while entry_points:
         max_energy = energy
     lit_spots = list(zip(*np.where(energy_grid > 0)))
     entry_points = list(set(entry_points) - set(lit_spots))
-    print(f"{len(entry_points)} left to consider")
+    # print(f"{len(entry_points)} left to consider")
 
 print(f"Solution 2: {max_energy} at {max_point[:2]}")
 
