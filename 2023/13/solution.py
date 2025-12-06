@@ -42,10 +42,10 @@ def summarize(patterns, smudges=0):
         # iterate through all columns, looking for vertically symmetric
         for k in range(p.shape[1]):
             if is_symmetric(p[:, k:], axis=1, smudges=smudges):
-                # print(f"symmetric after column {k}")
+                # print(f"symmetric after column {j}")
                 total.append((k + (p.shape[1] - k) / 2))
             if is_symmetric(p[:, :k], axis=1, smudges=smudges):
-                # print(f"symmetric before column {k}")
+                # print(f"symmetric before column {j}")
                 total.append(k / 2)
     return np.sum(total)
 
